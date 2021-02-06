@@ -12,7 +12,7 @@
 
 1. x Bad request - 400
 2. x Unauthorized - 401
-3. Forbidden - 403
+3. x Forbidden - 403
 4. Not found - 404
 5. x Internal server error - 500
 
