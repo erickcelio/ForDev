@@ -11,7 +11,7 @@
 > ## Erros
 
 1. x Bad request - 400
-2. Unauthorized - 401
+2. x Unauthorized - 401
 3. Forbidden - 403
 4. Not found - 404
 5. x Internal server error - 500
