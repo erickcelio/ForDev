@@ -3,6 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'package:for_dev/domain/usecases/usecases.dart';
+import 'package:for_dev/domain/entities/entities.dart';
 
 import 'package:for_dev/presentation/protocols/protocols.dart';
 import 'package:for_dev/presentation/presenters/presenters.dart';
@@ -26,6 +27,13 @@ void main() {
     mockValidationCall(field).thenReturn(value);
   }
 
+  PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
+
+  void mockAuthentication() {
+    mockAuthenticationCall()
+        .thenAnswer((_) async => AccountEntity(faker.guid.guid()));
+  }
+
   setUp(() {
     validation = ValidationSpy();
     authentication = AuthenticationSpy();
@@ -35,6 +43,7 @@ void main() {
     password = faker.internet.password();
 
     mockValidation();
+    mockAuthentication();
   });
 
   test('Should call Validation with correct email', () {
@@ -127,5 +136,14 @@ void main() {
     verify(authentication
             .auth(AuthenticationParams(email: email, password: password)))
         .called(1);
+  });
+
+  test('Should emit correct events on Authentication success', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+
+    await sut.auth();
   });
 }
